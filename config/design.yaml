@@ -12,7 +12,7 @@
 # from COLOUR, not from type.
 #
 # WHY THESE KEYS AND NOT OTHERS
-#   `theme.colors` accepts any kebab-case key, but only the keys in
+#   `design.colors` accepts any kebab-case key, but only the keys in
 #   `COLOR_TO_SV_TOKEN` (src/infrastructure/css/theme/theme-generators.ts) emit
 #   the `--sv-*` platform tokens as well as `--color-*`. Those are the ones every
 #   prestyled island already consumes, so declaring them repaints the triage
@@ -81,7 +81,7 @@ colors:
   error: '#b91c1c'
   info: '#0369a1'
 
-# Rendered only when the app declares `theme.colorScheme` or ships a
+# Rendered only when the app declares `design.colorScheme` or ships a
 # `theme-toggle`; the stylesheet carries it either way. The compiled selector is
 # `html:is(.dark, [data-theme='dark'])`, which re-points BOTH channels — a dark
 # key left out here keeps its light value, which is the documented way to say
@@ -114,7 +114,7 @@ darkColors:
   error: '#f87171'
   info: '#38bdf8'
 
-borderRadius:
+radius:
   sm: 0.25rem
   md: 0.5rem
   lg: 0.75rem
