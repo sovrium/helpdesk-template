@@ -5,8 +5,6 @@
 Built with [Sovrium](https://sovrium.com) — a configuration-as-code interpreter: one config
 file in, a complete self-hosted web application out.
 
-[![Deploy on Scalingo](https://cdn.scalingo.com/deploy/button.svg)](https://dashboard.scalingo.com/create/app?source=https://github.com/sovrium/helpdesk-template)
-
 ## Use this template
 
 Click **Use this template** on GitHub to copy this app into your own repository (clean
@@ -46,16 +44,6 @@ Sign-up is closed: an admin adds each agent. Everything is declared in
 [`app.yaml`](./app.yaml) and the [`config/`](./config) tree — no application code. Edit the
 config, restart, done.
 
-## Run locally
-
-```bash
-sovrium start app.yaml
-```
-
-Zero-config: embedded SQLite, local file storage, no env vars required to boot. See
-[`.env.example`](./.env.example) for the optional variables (database, auth bootstrap,
-email, demo data).
-
 ## What to try
 
 Load the demo data first. It creates two accounts — the support team of Tallyline, a small
@@ -88,25 +76,45 @@ address comes from a public form, and mailing it automatically would let anyone 
 domain send their text to any inbox. Put your team's address in
 `config/automations/when-a-ticket-arrives.yaml`.
 
+## Run locally
+
+```bash
+curl -fsSL https://sovrium.com/install | sh
+cp .env.example .env
+sovrium seed app.yaml        # needs SOVRIUM_SEED_PASSWORD in .env
+sovrium start app.yaml --watch
+```
+
+Zero-config: embedded SQLite, local file storage, no variable required to boot.
+[`.env.example`](./.env.example) lists the optional ones this app reads.
+The first administrator comes from `AUTH_ADMIN_EMAIL` and `AUTH_ADMIN_PASSWORD` on the
+first start, or from `sovrium admin create <email>`.
+`--watch` reloads the app each time you save a config file.
+
 ## Deploy
 
-The **Deploy on Scalingo** button above provisions the app with a PostgreSQL addon
-(Scalingo's filesystem is ephemeral — the database keeps your data across deploys; file
-uploads are stored in Postgres too). Secrets are generated automatically; you only fill in
-`BASE_URL`. Any other host works the same way: run the `sovrium` binary with this config
-(see the [deployment guides](https://sovrium.com/en/docs/installation)).
+Ship it to Sovrium Cloud from this directory: sign in once, then deploy. The CLI finds or
+creates the app it deploys to, checks the variables it needs, bundles and uploads it, and
+ends only once the app answers at its address.
+
+```bash
+sovrium login
+sovrium deploy
+```
+
+Any other host works the same way: run the `sovrium` binary with this config (see the
+[deployment guides](https://sovrium.com/en/docs/installation)).
 
 > **The demo accounts are for trying the app, not for running it.** The seed gives every
 > account it creates, the admin included, the one password in `SOVRIUM_SEED_PASSWORD`, and
-> their addresses are published in this README. Before anyone else can reach the app, choose
-> a long password or skip the seed, and change or delete the demo admin. Sign-up is already
-> closed (`allowSignUp: false`), so nobody can add an account of their own.
+> their addresses are in `seed/`. Before anyone else can reach the app, choose a long
+> password or skip the seed, and change or delete the demo admin.
 
 ## About this repository
 
 This repository is **auto-published from the
 [Sovrium monorepo](https://github.com/sovrium/sovrium)** on every release
-(source: [`templates/helpdesk`](https://github.com/sovrium/sovrium/tree/main/templates/helpdesk)).
+(source: [`src/templates/helpdesk`](https://github.com/sovrium/sovrium/tree/main/src/templates/helpdesk)).
 Issues are welcome here; please send code contributions upstream to the monorepo so the
 template stays in sync with the engine. The pinned engine release lives in
 `.sovrium-version`.
